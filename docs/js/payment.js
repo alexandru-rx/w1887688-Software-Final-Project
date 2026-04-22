@@ -87,7 +87,7 @@ async function confirmPayment() {
     const ticket = getSelectedTicketFromStorage();
     if (!ticket || String(ticket.eventId) !== String(event.id || event._id)) {
       alert('No ticket selection found. Please choose tickets first.');
-      window.location.href = 'TicketingPlatform.html';
+      window.location.href = 'index.html';
       return;
     }
 
@@ -187,7 +187,7 @@ async function initPaymentPage() {
   const ticket = getSelectedTicketFromStorage();
 
   if (!event || !ticket) {
-    window.location.href = 'TicketingPlatform.html';
+    window.location.href = 'index.html';
     return;
   }
 
@@ -250,7 +250,7 @@ async function initPaymentPage() {
     backBtn.dataset.bound = '1';
 
     backBtn.addEventListener('click', () => {
-      window.location.href = 'TicketingPlatform.html';
+      window.location.href = 'index.html';
     });
   }
 
@@ -331,7 +331,7 @@ async function initSuccessPaymentPage() {
   lucide?.createIcons?.();
 
   document.getElementById('view-events-btn')?.addEventListener('click', () => {
-    window.location.href = 'TicketingPlatform.html';
+    window.location.href = 'index.html';
   });
 }
 
