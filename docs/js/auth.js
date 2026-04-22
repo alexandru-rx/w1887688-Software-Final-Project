@@ -252,7 +252,7 @@ function setupHeaderProfileMenu() {
       updateHeaderAuthUI();
       alert('Guest checkout cleared.');
       menu.classList.add('hidden');
-      window.location.href = 'TicketingPlatform.html';
+      window.location.href = 'index.html';
       return;
     }
 
@@ -270,7 +270,7 @@ function setupHeaderProfileMenu() {
 
     if (action === 'logout') {
       logoutUser();
-      window.location.href = 'TicketingPlatform.html';
+      window.location.href = 'index.html';
       return;
     }
   });
@@ -300,7 +300,7 @@ function handleGuestCheckout(e) {
   saveGuestToStorage(guest);
 
   const selectedEvent = getSelectedEventFromStorage?.();
-  const nextUrl = selectedEvent ? 'Payment.html' : 'TicketingPlatform.html';
+  const nextUrl = selectedEvent ? 'Payment.html' : 'index.html';
 
   alert('Guest details captured. Redirecting...');
   window.location.href = nextUrl;
@@ -327,7 +327,7 @@ async function handleLogin(e) {
     USER_STATE.userRole = data.user.role;
 
     const selectedEvent = getSelectedEventFromStorage();
-    const nextUrl = selectedEvent ? 'Payment.html' : 'TicketingPlatform.html';
+    const nextUrl = selectedEvent ? 'Payment.html' : 'index.html';
 
     alert(`Logged in as ${USER_STATE.userRole}. Redirecting...`);
     window.location.href = nextUrl;
@@ -419,7 +419,7 @@ async function handleSignUp(e) {
     USER_STATE.userRole = data.user.role;
 
     const selectedEvent = getSelectedEventFromStorage();
-    const nextUrl = selectedEvent ? 'Payment.html' : 'TicketingPlatform.html';
+    const nextUrl = selectedEvent ? 'Payment.html' : 'index.html';
 
     alert('Account created! Redirecting...');
     window.location.href = nextUrl;
