@@ -75,7 +75,7 @@ var SELECTED_EVENT_KEY = "ticketwizard_selected_event";
 var SELECTED_TICKET_KEY = "ticketwizard_selected_ticket";
 var GUEST_STORAGE_KEY = "ticketwizard_guest";
 
-window.API_BASE = window.API_BASE || "http://127.0.0.1:5000";
+window.API_BASE = window.API_BASE || "https://w1887688-software-final-project.onrender.com";
 var API_BASE = window.API_BASE;
 
 var IS_PROCESSING_PAYMENT = false;
