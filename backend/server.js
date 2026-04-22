@@ -26,18 +26,19 @@ app.set("trust proxy", 1);
 const FRONTEND_ORIGINS = [
   "http://127.0.0.1:5500",
   "http://localhost:5500",
-  process.env.FRONTEND_URL
-].filter(Boolean);
+  "https://alexandru-rx.github.io"
+];
 
 /****************************************************
  * MIDDLEWARE: CORS
  * - Allows requests from local frontend
  * - credentials:true is required for sessions/cookies
  ****************************************************/
+
 app.use(
   cors({
     origin: (origin, cb) => {
-      if (!origin) return cb(null, true); // tools like Postman
+      if (!origin) return cb(null, true);
       if (FRONTEND_ORIGINS.includes(origin)) return cb(null, true);
       return cb(new Error(`Not allowed by CORS: ${origin}`));
     },
