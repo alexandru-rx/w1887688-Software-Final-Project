@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- META -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PAGE TITLE -->
+  <title>Ticket Wizard</title>
+
+  <!-- STYLESHEET -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- FONT -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- ICON LIBRARY -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <div id="app" class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <h1 class="title">Ticket Wizard</h1>
+
+      <div class="header-right">
+        <div id="auth-status" class="status">Not logged in</div>
+
+        <div class="profile-wrap">
+          <button
+            id="header-profile-btn"
+            class="profile-btn"
+            type="button"
+            aria-label="Open profile menu"
+          >
+            <i data-lucide="user"></i>
+          </button>
+
+          <div id="profile-menu" class="profile-menu hidden" role="menu"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- VIEW NAVIGATION -->
+    <nav class="nav-container" aria-label="Main navigation">
+      <button id="nav-events" data-view="events" class="nav-btn active" type="button">
+        Events
+      </button>
+      <button id="nav-support" data-view="support" class="nav-btn" type="button">
+        Help &amp; Support
+      </button>
+      <button id="nav-dashboard" data-view="dashboard" class="nav-btn" type="button">
+        Promoter Dashboard
+      </button>
+    </nav>
+
+    <!-- SEARCH + FILTER SYSTEM -->
+    <div class="search-container">
+
+      <!-- MAIN SEARCH BAR -->
+      <div class="main-search-bar">
+        <i data-lucide="search" class="icon"></i>
+
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search by Artist, Event, or Venue"
+          aria-label="Search by artist, event, or venue"
+        />
+
+        <button type="button" class="search-button" onclick="handleSearch()">
+          Search
+        </button>
+      </div>
+
+      <!-- FILTER ROW -->
+      <div class="filter-row">
+
+        <!-- LOCATION FILTER -->
+        <div
+          id="location-filter-segment"
+          class="filter-segment"
+          onclick="toggleLocationDropdown()"
+          aria-expanded="false"
+          aria-controls="location-dropdown-menu"
+          role="button"
+          tabindex="0"
+        >
+          <i data-lucide="map-pin" class="icon"></i>
+          <div class="flex flex-col">
+            <span class="label">Location</span>
+            <span id="location-value" class="value">All Of England</span>
+          </div>
+          <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+        </div>
+
+        <!-- DATE FILTER -->
+        <div
+          id="dates-filter-segment"
+          class="filter-segment"
+          onclick="openDatePickerModal()"
+          aria-expanded="false"
+          aria-controls="date-picker-modal"
+          role="button"
+          tabindex="0"
+        >
+          <i data-lucide="calendar" class="icon"></i>
+          <div class="flex flex-col">
+            <span class="label">Dates</span>
+            <span id="dates-value" class="value">All Dates</span>
+          </div>
+          <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+        </div>
+
+        <!-- GENRE FILTER -->
+        <div
+          id="genre-filter-segment"
+          class="filter-segment"
+          onclick="openGenreModal()"
+          aria-expanded="false"
+          aria-controls="genre-modal"
+          role="button"
+          tabindex="0"
+        >
+          <i data-lucide="music" class="icon"></i>
+          <div class="flex flex-col">
+            <span class="label">Genre</span>
+            <span id="genre-value" class="value">All Genres</span>
+          </div>
+          <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+        </div>
+      </div>
+
+      <!-- LOCATION DROPDOWN MENU -->
+      <div id="location-dropdown-menu" class="location-dropdown hidden" role="menu"></div>
+
+      <!-- DATE PICKER MODAL -->
+      <div id="date-picker-modal" class="date-picker-modal hidden">
+        <div class="picker-header">
+          <span class="picker-title">Select a Date</span>
+
+          <button type="button" class="picker-close" onclick="closeDatePickerModal()">
+            <i data-lucide="x" class="icon"></i>
+          </button>
+        </div>
+
+        <div class="picker-nav">
+          <button type="button" class="nav-btn-arrow" onclick="changeMonth(-1)">
+            <i data-lucide="chevron-left" class="icon"></i>
+          </button>
+
+          <div class="month-year-select">
+            <select id="month-select" aria-label="Select month"></select>
+            <select id="year-select" aria-label="Select year"></select>
+          </div>
+
+          <button type="button" class="nav-btn-arrow" onclick="changeMonth(1)">
+            <i data-lucide="chevron-right" class="icon"></i>
+          </button>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="weekdays">
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+            <span>Sun</span>
+          </div>
+
+          <div id="dates-grid" class="dates-grid"></div>
+        </div>
+
+        <div class="picker-footer">
+          <button type="button" class="done-button" onclick="confirmSelectedDate()">
+            Done
+          </button>
+        </div>
+      </div>
+
+      <!-- GENRE MODAL -->
+      <div id="genre-modal" class="genre-modal hidden">
+        <div class="picker-header">
+          <span id="genre-modal-title" class="picker-title">Select Genre</span>
+
+          <button type="button" class="picker-close" onclick="closeGenreModal()">
+            <i data-lucide="x" class="icon"></i>
+          </button>
+        </div>
+
+        <div class="modal-body-content">
+          <div id="main-genre-list" class="genre-list"></div>
+
+          <div id="sub-genre-list" class="sub-genre-list">
+            <div class="genre-item" style="cursor: default; background: white;">
+              Select a Genre to see sub-genres
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div id="content-viewport" class="content-section">
+
+      <!-- CUSTOMER EVENTS VIEW -->
+      <div id="events-view" class="view-content">
+        <h2 class="h2-title">Discover UK Events (Customer View)</h2>
+        <p>Events matching your criteria will be shown below.</p>
+        <div id="events-list"></div>
+      </div>
+
+      <!-- HELP & SUPPORT VIEW -->
+      <div id="support-view" class="view-content hidden">
+        <h2 class="h2-title">Help &amp; Support</h2>
+        <p>Browse support categories or ask the Ticket Wizard assistant for help.</p>
+
+        <!-- SUPPORT CATEGORY CARDS -->
+        <div class="support-categories-grid">
+
+          <button class="support-category-card" type="button" onclick="showSupportTopic('booking')">
+            <div class="support-category-icon">
+              <i data-lucide="ticket"></i>
+            </div>
+            <div class="support-category-text">
+              <h3>Booking Tickets</h3>
+              <p>Presales, payment and checkout help</p>
+            </div>
+            <div class="support-category-arrow">
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </button>
+
+          <button class="support-category-card" type="button" onclick="showSupportTopic('tickets')">
+            <div class="support-category-icon">
+              <i data-lucide="receipt"></i>
+            </div>
+            <div class="support-category-text">
+              <h3>My Tickets</h3>
+              <p>Find and manage your booked tickets</p>
+            </div>
+            <div class="support-category-arrow">
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </button>
+
+          <button class="support-category-card" type="button" onclick="showSupportTopic('refunds')">
+            <div class="support-category-icon">
+              <i data-lucide="wallet"></i>
+            </div>
+            <div class="support-category-text">
+              <h3>Refunds &amp; Exchanges</h3>
+              <p>Refund policy and ticket changes</p>
+            </div>
+            <div class="support-category-arrow">
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </button>
+
+          <button class="support-category-card" type="button" onclick="showSupportTopic('delivery')">
+            <div class="support-category-icon">
+              <i data-lucide="mail"></i>
+            </div>
+            <div class="support-category-text">
+              <h3>Ticket Delivery</h3>
+              <p>How your ticket and QR code are delivered</p>
+            </div>
+            <div class="support-category-arrow">
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </button>
+
+          <button class="support-category-card" type="button" onclick="showSupportTopic('account')">
+            <div class="support-category-icon">
+              <i data-lucide="user-round"></i>
+            </div>
+            <div class="support-category-text">
+              <h3>My Account</h3>
+              <p>Login, password and profile support</p>
+            </div>
+            <div class="support-category-arrow">
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </button>
+
+          <button class="support-category-card" type="button" onclick="showSupportTopic('events')">
+            <div class="support-category-icon">
+              <i data-lucide="calendar-days"></i>
+            </div>
+            <div class="support-category-text">
+              <h3>Event Information</h3>
+              <p>Venue, timing and event guidance</p>
+            </div>
+            <div class="support-category-arrow">
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </button>
+
+          <button class="support-category-card" type="button" onclick="showSupportTopic('contact')">
+            <div class="support-category-icon">
+              <i data-lucide="circle-help"></i>
+            </div>
+            <div class="support-category-text">
+              <h3>Contact Us</h3>
+              <p>Get help with your issue</p>
+            </div>
+            <div class="support-category-arrow">
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </button>
+        </div>
+
+        <!-- SELECTED SUPPORT CONTENT -->
+        <div class="support-grid">
+
+          <!-- LEFT: SELECTED SUPPORT DETAILS -->
+          <div class="support-card">
+            <h3 id="support-topic-title" class="h3-title">Booking Tickets</h3>
+            <p id="support-topic-text" class="support-topic-text">
+              Select an event, choose your ticket type, continue to payment, and complete checkout to confirm your booking.
+            </p>
+
+            <div id="support-faq-list" class="faq-list"></div>
+          </div>
+
+          <!-- RIGHT: CHATBOT SECTION -->
+          <div class="support-card">
+            <h3 class="h3-title">Ticket Wizard Assistant</h3>
+            <p class="support-muted">Ask a quick question and get a guided response.</p>
+
+            <div id="support-chat-messages" class="support-chat-box">
+              <div class="chat-bubble bot">
+                Hi! I can help with tickets, orders, payments, and account questions.
+              </div>
+            </div>
+
+            <div class="support-chat-input-row">
+              <input
+                type="text"
+                id="support-chat-input"
+                placeholder="Ask something like: Where are my tickets?"
+                aria-label="Ask the Ticket Wizard assistant a question"
+              />
+              <button type="button" class="search-button" onclick="handleSupportChat()">
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMOTER DASHBOARD VIEW -->
+      <div id="dashboard-view" class="view-content hidden">
+
+        <div class="dash-header">
+          <div>
+            <h2 class="h2-title">Promoter Dashboard</h2>
+            <p class="dash-subtitle">Manage your events and view sales performance.</p>
+          </div>
+
+          <button id="add-event-btn" class="primary-btn" type="button" onclick="openEventModal('new')">
+            <i data-lucide="plus" class="icon-sm"></i>
+            Add New Event
+          </button>
+        </div>
+
+        <div id="promoter-validation-panel"></div>
+
+        <!-- EVENT LIST -->
+        <div class="dash-section-head">
+          <h3 class="h3-title">Your Event Listings</h3>
+
+          <div class="dash-toolbar">
+            <div class="dash-filters">
+              <button class="dash-filter active" data-filter="all" type="button">All</button>
+              <button class="dash-filter" data-filter="upcoming" type="button">Upcoming</button>
+              <button class="dash-filter" data-filter="past" type="button">Past</button>
+            </div>
+
+            <button id="dashboard-analytics-btn" class="primary-btn" type="button" onclick="openDashboardAnalytics()">
+              <i data-lucide="bar-chart-3" class="icon-sm"></i>
+              Analytics
+            </button>
+          </div>
+        </div>
+
+        <div id="promoter-events-list" class="dash-events-grid">
+          <p class="text-muted-center">
+            No events found. Click "Add New Event" to list your first event.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREATE / EDIT EVENT MODAL -->
+    <div id="event-management-modal" class="modal hidden">
+      <div class="modal-content large-modal">
+        <div class="modal-header">
+          <h3 id="event-modal-title" class="modal-title">Create New Event</h3>
+
+          <button type="button" class="picker-close" onclick="closeEventModal()">
+            <i data-lucide="x" class="icon"></i>
+          </button>
+        </div>
+
+        <form id="event-form" class="event-form" onsubmit="handleEventSave(event)">
+          <!-- GENERAL EVENT DETAILS -->
+          <fieldset class="form-section">
+            <legend class="section-title">General Event Details</legend>
+
+            <input type="hidden" id="event-id" />
+
+            <label for="event-artist">Artist/Headline Act</label>
+            <input type="text" id="event-artist" required />
+
+            <label for="event-title">Event Title</label>
+            <input type="text" id="event-title" required />
+
+            <label for="event-venue">Venue Name</label>
+            <input type="text" id="event-venue" placeholder="E.g., O2 Academy" required />
+
+            <label for="event-location">City/Location</label>
+            <input type="text" id="event-location" placeholder="E.g., London" required />
+            <small class="field-hint">
+              Suggestions: London, Manchester, Birmingham, Liverpool, Leeds, Bristol, Nottingham, Brighton, Leicester, Bournemouth, Edinburgh, Glasgow
+            </small>
+
+            <label for="event-genre">Genre</label>
+            <input type="text" id="event-genre" placeholder="E.g., Pop, House, Trap" required />
+            <small class="field-hint">
+              Suggestions: Pop, Rock/Indie, Hip Hop/R&amp;B, Electronic/Dance, Classical, Jazz/Blues, Folk, World Music, House, Techno, Trance, Trap, Alternative, Synth Pop
+            </small>
+          </fieldset>
+
+          <!-- DATE / TIME / TICKETS -->
+          <fieldset class="form-section grid-2">
+            <legend class="section-title col-span-2">Date, Time &amp; Tickets</legend>
+
+            <div>
+              <label for="event-date">Event Date</label>
+              <input type="date" id="event-date" required />
+            </div>
+
+            <div>
+              <label for="event-time">Start Time</label>
+              <input type="time" id="event-time" required />
+            </div>
+
+            <!-- Ticket Type 1 -->
+            <div>
+              <label for="ticket-type-1-name">Ticket Type 1</label>
+              <input type="text" id="ticket-type-1-name" placeholder="E.g. Standing / Standard" />
+            </div>
+
+            <div>
+              <label for="ticket-type-1-price">Price £ (1)</label>
+              <input type="number" id="ticket-type-1-price" step="0.01" min="0" />
+            </div>
+
+            <div class="col-span-2">
+              <label for="ticket-type-1-capacity">Capacity (1)</label>
+              <input type="number" id="ticket-type-1-capacity" step="1" min="0" />
+            </div>
+
+            <!-- Ticket Type 2 -->
+            <div>
+              <label for="ticket-type-2-name">Ticket Type 2</label>
+              <input type="text" id="ticket-type-2-name" placeholder="E.g. Seated" />
+            </div>
+
+            <div>
+              <label for="ticket-type-2-price">Price £ (2)</label>
+              <input type="number" id="ticket-type-2-price" step="0.01" min="0" />
+            </div>
+
+            <div class="col-span-2">
+              <label for="ticket-type-2-capacity">Capacity (2)</label>
+              <input type="number" id="ticket-type-2-capacity" step="1" min="0" />
+            </div>
+
+            <!-- Ticket Type 3 -->
+            <div>
+              <label for="ticket-type-3-name">Ticket Type 3</label>
+              <input type="text" id="ticket-type-3-name" placeholder="E.g. VIP" />
+            </div>
+
+            <div>
+              <label for="ticket-type-3-price">Price £ (3)</label>
+              <input type="number" id="ticket-type-3-price" step="0.01" min="0" />
+            </div>
+
+            <div class="col-span-2">
+              <label for="ticket-type-3-capacity">Capacity (3)</label>
+              <input type="number" id="ticket-type-3-capacity" step="1" min="0" />
+            </div>
+
+            <!-- Total Capacity -->
+            <div class="col-span-2">
+              <label for="event-capacity">Total Ticket Capacity</label>
+              <input
+                type="number"
+                id="event-capacity"
+                step="1"
+                min="1"
+                readonly
+                placeholder="Auto-calculated from ticket capacities"
+              />
+              <small class="field-hint">
+                Automatically calculated from all ticket type capacities.
+              </small>
+            </div>
+          </fieldset>
+
+          <!-- EVENT DESCRIPTION -->
+          <fieldset class="form-section">
+            <legend class="section-title">Event Description</legend>
+
+            <label for="event-description">Description (Max 500 chars)</label>
+             <textarea
+             id="event-description"
+             rows="4"
+             maxlength="500"
+             placeholder="Describe your event, line-up, and vibe..."
+            ></textarea>
+          </fieldset>
+
+          <!-- FORM ACTIONS -->
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" onclick="closeEventModal()">
+              Cancel
+            </button>
+            <button type="submit" class="primary-btn">
+              Save Event
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ANALYTICS MODAL -->
+    <div id="analytics-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="analytics-modal-title" class="modal-title">Event Analytics</h3>
+
+          <button type="button" class="picker-close" onclick="closeAnalyticsModal()">
+            <i data-lucide="x" class="icon"></i>
+          </button>
+        </div>
+
+        <div id="analytics-modal-body" class="event-form"></div>
+      </div>
+    </div>
+
+    <!-- TICKET TYPE MODAL -->
+    <div id="ticket-type-overlay" class="overlay hidden"></div>
+
+    <div id="ticket-type-modal" class="ticket-type-modal hidden" role="dialog" aria-modal="true">
+      <div class="picker-header">
+        <span class="picker-title">Select Ticket Type</span>
+
+        <button type="button" class="picker-close" onclick="closeTicketTypeModal()">
+          <i data-lucide="x" class="icon"></i>
+        </button>
+      </div>
+
+      <div class="ticket-type-body">
+        <div id="ticket-type-event-info" class="ticket-type-event-info"></div>
+
+        <div id="ticket-type-options" class="ticket-type-options"></div>
+
+        <div class="ticket-qty-row">
+          <span class="qty-label">Quantity</span>
+
+          <div class="qty-controls">
+            <button type="button" class="qty-btn" id="qty-minus">−</button>
+            <span id="ticket-qty" class="qty-value">1</span>
+            <button type="button" class="qty-btn" id="qty-plus">+</button>
+          </div>
+        </div>
+
+        <div class="ticket-type-footer">
+          <button type="button" class="secondary-btn" onclick="closeTicketTypeModal()">
+            Cancel
+          </button>
+          <button type="button" class="primary-btn" id="confirm-ticket-btn">
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FRONTEND SCRIPTS -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/help.js"></script>
+  <script src="js/payment.js"></script>
+  <script src="js/page-init.js"></script>
+
+  <!-- PRIVACY POLICY FOOTER -->
+<div style="text-align: center; padding: 1rem 0 2rem;">
+  <a
+    href="PrivacyPolicy.html"
+    style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem;"
+  >
+    Privacy Policy
+  </a>
+</div>
+
+  <!-- INITIALISE ICONS -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

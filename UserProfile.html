@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- META -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PAGE TITLE -->
+  <title>Profile - Ticket Wizard</title>
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- FONT -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="login-page">
+  <div class="checkout-container">
+
+    <!-- HEADER -->
+    <header class="checkout-header">
+      <h1 class="title">Ticket Wizard</h1>
+
+      <button type="button" class="back-btn" id="back-to-events-btn">
+        <i data-lucide="chevron-left"></i>
+        Back to Events
+      </button>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="login-flow-content">
+
+      <h2>Your Profile</h2>
+      <p class="subtitle">View your account information and recent orders.</p>
+
+      <!-- PROFILE TABS -->
+      <div class="profile-tabs">
+        <button type="button" class="tab-btn active" data-target="profile-account">
+          Account Details
+        </button>
+        <button type="button" class="tab-btn" data-target="profile-orders">
+          Order History
+        </button>
+      </div>
+
+      <!-- ACCOUNT DETAILS -->
+      <section id="profile-account" class="profile-section">
+        <div class="summary-card" id="profile-card"></div>
+      </section>
+
+      <!-- ORDER HISTORY -->
+      <section id="profile-orders" class="profile-section hidden">
+        <div id="orders-list" class="orders-list">
+          <p class="text-muted-center">No orders yet.</p>
+        </div>
+      </section>
+
+      <!-- LOGOUT -->
+      <button
+        type="button"
+        class="submit-btn primary-btn"
+        id="logout-btn"
+        style="margin-top: 1.5rem;"
+      >
+        Logout
+      </button>
+
+    </main>
+  </div>
+
+  <!-- FRONTEND SCRIPTS -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/help.js"></script>
+  <script src="js/payment.js"></script>
+  <script src="js/page-init.js"></script>
+
+  <!-- INITIALISE ICONS -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

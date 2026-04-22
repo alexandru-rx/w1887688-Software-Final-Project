@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- META -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PAGE TITLE -->
+  <title>Checkout - Login or Continue as Guest</title>
+
+  <!-- SHARED STYLESHEET -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ICON LIBRARY -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="login-page">
+  <div class="checkout-container">
+
+    <!-- HEADER + BACK NAVIGATION -->
+    <header class="checkout-header">
+      <h1 class="title">Ticket Wizard</h1>
+
+      <button type="button" class="back-btn" id="back-to-events-btn">
+        <i data-lucide="chevron-left"></i>
+        Back to Events
+      </button>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="login-flow-content">
+
+      <!-- ORDER SUMMARY -->
+      <section id="order-summary" class="order-summary hidden">
+        <h3 class="summary-title">Order Summary</h3>
+        <div id="order-summary-body" class="summary-card"></div>
+      </section>
+
+      <!-- PAGE INTRO -->
+      <h2>Proceed to Payment</h2>
+      <p class="subtitle">
+        Complete your purchase quickly by continuing as a guest, or log in to use your saved details.
+      </p>
+
+      <!-- AUTHENTICATION TABS -->
+      <div class="option-tabs">
+        <button type="button" class="tab-btn active" data-target="guest-section">
+          Continue as Guest
+        </button>
+        <button type="button" class="tab-btn" data-target="login-section">
+          Login
+        </button>
+        <button type="button" class="tab-btn" data-target="signup-section">
+          Create Account
+        </button>
+      </div>
+
+      <!-- GUEST CHECKOUT FORM -->
+      <section id="guest-section" class="form-section active">
+        <p class="info-text">
+          We only require your contact and billing details to complete this one-off purchase.
+        </p>
+
+        <form id="guest-form" novalidate>
+          <input
+            type="email"
+            id="guest-email"
+            name="guestEmail"
+            placeholder="Email Address (Required)"
+            autocomplete="email"
+            required
+          />
+
+          <input
+            type="text"
+            id="guest-name"
+            name="guestName"
+            placeholder="Full Name (Required)"
+            autocomplete="name"
+            required
+          />
+
+          <input
+            type="tel"
+            id="guest-phone"
+            name="guestPhone"
+            placeholder="Phone Number"
+            autocomplete="tel"
+          />
+
+          <button type="submit" class="submit-btn done-button">
+            Proceed to Payment
+          </button>
+        </form>
+      </section>
+
+      <!-- EXISTING USER LOGIN -->
+      <section id="login-section" class="form-section hidden">
+        <form id="login-form" novalidate>
+          <input
+            type="email"
+            id="login-email"
+            name="email"
+            placeholder="Email Address"
+            autocomplete="email"
+            required
+          />
+
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+          />
+
+          <button type="submit" class="submit-btn primary-btn">
+            Login
+          </button>
+
+          <a href="forgot-password.html" class="forgot-password">
+            Forgot Password?
+          </a>
+        </form>
+      </section>
+
+      <!-- ACCOUNT REGISTRATION -->
+<section id="signup-section" class="form-section hidden">
+  <form id="signup-form" novalidate>
+    <input
+      type="text"
+      id="signup-name"
+      name="fullName"
+      placeholder="Full Name"
+      autocomplete="name"
+      required
+    />
+
+    <input
+      type="email"
+      id="signup-email"
+      name="email"
+      placeholder="Email Address"
+      autocomplete="email"
+      required
+    />
+
+    <input
+      type="password"
+      id="signup-password"
+      name="password"
+      placeholder="Password"
+      autocomplete="new-password"
+      required
+    />
+
+    <div id="password-rules" class="password-rules">
+      <p id="rule-length">• At least 8 characters</p>
+      <p id="rule-upper">• One uppercase letter</p>
+      <p id="rule-lower">• One lowercase letter</p>
+      <p id="rule-number">• One number</p>
+      <p id="rule-special">• One special character</p>
+    </div>
+
+    <button type="submit" class="submit-btn secondary-btn">
+      Create Account &amp; Pay
+    </button>
+  </form>
+</section>
+
+    </main>
+  </div>
+
+  <!-- FRONTEND SCRIPTS -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/help.js"></script>
+  <script src="js/payment.js"></script>
+  <script src="js/page-init.js"></script>
+
+  <!-- INITIALISE ICONS -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
