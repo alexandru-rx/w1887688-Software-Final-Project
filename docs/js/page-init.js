@@ -411,7 +411,7 @@ async function initLoginSystem() {
     if (next === 'payment' && selectedEvent) {
       window.location.href = 'Payment.html';
     } else {
-      window.location.href = 'TicketingPlatform.html';
+      window.location.href = 'index.html';
     }
     return;
   }
@@ -441,7 +441,7 @@ async function initLoginSystem() {
     sessionStorage.removeItem('ticketwizard_selected_ticket');
     localStorage.removeItem('ticketwizard_guest');
 
-    window.location.href = 'TicketingPlatform.html';
+    window.location.href = 'index.html';
   });
 }
 
@@ -564,11 +564,11 @@ async function initUserProfilePage() {
 
   document.getElementById('logout-btn')?.addEventListener('click', () => {
     logoutUser();
-    window.location.href = 'TicketingPlatform.html';
+    window.location.href = 'index.html';
   });
 
   document.getElementById('back-to-events-btn')?.addEventListener('click', () => {
-    window.location.href = 'TicketingPlatform.html';
+    window.location.href = 'index.html';
   });
 
   lucide?.createIcons?.();
