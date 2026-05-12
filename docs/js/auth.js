@@ -148,20 +148,27 @@ async function logoutUser() {
   try {
     await apiFetch('/api/auth/logout', { method: 'POST' });
   } catch (err) {
-    console.warn('Logout request failed (still clearing UI):', err.message);
+    console.warn('Logout request failed, clearing frontend anyway:', err.message);
   }
 
   USER_STATE.isLoggedIn = false;
-  USER_STATE.userRole = 'customer';
+  USER_STATE.userRole = 'guest';
   USER_STATE.userEmail = null;
   USER_STATE.fullName = '';
   USER_STATE.phone = '';
 
+  localStorage.removeItem(USER_STORAGE_KEY);
+  localStorage.removeItem(GUEST_STORAGE_KEY);
   localStorage.removeItem(SELECTED_EVENT_KEY);
   localStorage.removeItem(SELECTED_TICKET_KEY);
+  localStorage.removeItem(LAST_ORDER_ID_KEY);
+  localStorage.removeItem("ticketwizard_last_tickets");
+  localStorage.removeItem("ticketwizard_payment_finalised");
 
-  updateHeaderAuthUI();
-  switchView?.('events');
+  sessionStorage.removeItem(SELECTED_EVENT_KEY);
+  sessionStorage.removeItem(SELECTED_TICKET_KEY);
+
+  window.location.href = 'TicketingPlatform.html';
 }
 
 function setupHeaderProfileMenu() {
