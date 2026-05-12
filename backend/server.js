@@ -66,17 +66,24 @@ app.use(express.json());
  * MIDDLEWARE: SESSION SETUP
  * Stores logged-in user session in cookie-based session
  ****************************************************/
+
 app.use(
   session({
     name: "ticketwizard.sid",
     secret: process.env.SESSION_SECRET || "ticketwizard_secret_change_me",
     resave: false,
     saveUninitialized: false,
+
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      collectionName: "sessions"
+    }),
+
     cookie: {
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production"
-}
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production"
+    }
   })
 );
 
