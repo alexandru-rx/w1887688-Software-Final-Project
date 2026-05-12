@@ -9,7 +9,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
 
 const authRoutes = require("./routes/auth");
 const orderRoutes = require("./routes/orders");
@@ -74,12 +73,6 @@ app.use(
     secret: process.env.SESSION_SECRET || "ticketwizard_secret_change_me",
     resave: false,
     saveUninitialized: false,
-
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
-      collectionName: "sessions"
-    }),
-
     cookie: {
       httpOnly: true,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
